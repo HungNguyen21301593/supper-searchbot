@@ -1,0 +1,63 @@
+version: "3.9"
+services:
+  database:
+    image: postgres:14.1-alpine
+    container_name: database
+    restart: always
+    ports:
+      - '5432:5432'
+    networks:
+          - web_net
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes: 
+      - kijiji-helper-db:/var/lib/postgresql/data
+
+  executor-0:
+    container_name: executor-0
+    build: ./supper-searchbot
+    restart: always
+    shm_size: 2gb
+    privileged: true
+    depends_on: 
+            - database
+    networks:
+          - web_net
+    environment:
+      - CONNECTION_STRING=${CONNECTION_STRING}
+  
+  executor-1:
+    container_name: executor-1
+    build: ./supper-searchbot
+    restart: always
+    shm_size: 2gb
+    privileged: true
+    depends_on: 
+            - database
+    networks:
+          - web_net
+    environment:
+      - CONNECTION_STRING=${CONNECTION_STRING}
+  
+  executor-2:
+    container_name: executor-2
+    build: ./supper-searchbot
+    restart: always
+    shm_size: 2gb
+    privileged: true
+    depends_on: 
+            - database
+    networks:
+          - web_net
+    environment:
+      - CONNECTION_STRING=${CONNECTION_STRING}
+    
+networks:
+    web_net:
+      external: false
+      driver:  bridge
+
+volumes:
+  kijiji-helper-shared-volume:
+  kijiji-helper-db:
