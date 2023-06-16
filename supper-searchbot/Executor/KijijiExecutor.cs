@@ -1,122 +1,131 @@
-﻿using AngleSharp.Common;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using supper_searchbot.Entity;
 
-namespace supper_searchbot.Executor;
-
-public class KijijiExecutor : ExecutorBase, IDisposable
+namespace supper_searchbot.Executor
 {
-    public KijijiExecutor(ExecutorSetting executorSetting, DataContext dataContext) :
-        base(executorSetting, dataContext)
+    public class KijijiExecutor : ExecutorBase, IDisposable
     {
-    }
-
-    public async Task RunAsync()
-    {
-        foreach (var criteriaUrl in setting.BaseUrlSetting.CriteriaUrls)
+        public KijijiExecutor(ExecutorSetting executorSetting, DataContext dataContext) :
+            base(executorSetting, dataContext)
         {
-            for (var pageIndex = setting.StartPage; pageIndex < setting.EndPage; pageIndex++)
+        }
+
+        public async Task RunAsync()
+        {
+            foreach (var criteriaUrl in setting.BaseUrlSetting.CriteriaUrls)
             {
-                var allParams = setting.BaseUrlSetting.StaticParams;
-                allParams.TryAdd(setting.BaseUrlSetting.DynamicParams.Page, pageIndex.ToString());
-                var homeUrl = allParams.Apply(criteriaUrl);
+                for (var pageIndex = setting.StartPage; pageIndex < setting.EndPage; pageIndex++)
+                {
+                    var allParams = setting.BaseUrlSetting.StaticParams;
+                    allParams.TryAdd(setting.BaseUrlSetting.DynamicParams.Page, pageIndex.ToString());
+                    var homeUrl = allParams.Apply(criteriaUrl);
+                    try
+                    {
+                        LogsMessageBuilder.Clear();
+                        Console.WriteLine($"********************* Start page {pageIndex} *********************");
+                        LogsMessageBuilder.AppendLine($"------------------------------------------------------------------");
+                        LogsMessageBuilder.AppendLine($"Proceed scan page {homeUrl} with keywords: {string.Join(", ", setting.Keywords)}");
+                        await SendLogMessage(LogsMessageBuilder);
+                        await ScanPage(homeUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"Warning, there was an error {e.Message} {e.GetType()}");
+                        await TryHandleErrorUnreachableException(e);
+                    }
+                    finally
+                    {
+                        LogsMessageBuilder.Clear();
+                        Console.WriteLine($"********************* End page {pageIndex} *********************");
+                        LogsMessageBuilder.AppendLine($"Done scan page {homeUrl}");
+                        LogsMessageBuilder.AppendLine($"------------------------------------------------------------------");
+                        await SendLogMessage(LogsMessageBuilder);
+                    }
+                }
+            }
+        }
+
+        public async Task ScanPage(string homeUrl)
+        {
+            var titles = await GetAllUrlElements(homeUrl);
+            LogsMessageBuilder.Clear();
+            LogsMessageBuilder.AppendLine($"Page {homeUrl}, found {titles.Count} new ads, scanning all");
+            LogsMessageBuilder.AppendLine($"--------------------------------------------------------------------");
+            await SendLogMessage(LogsMessageBuilder);
+            foreach (var title in titles.Select((value,index)=> (value, index)))
+            {
                 try
                 {
                     LogsMessageBuilder.Clear();
-                    Console.WriteLine($"********************* Start page {pageIndex} *********************");
-                    LogsMessageBuilder.AppendLine($"------------------------------------------------------------------");
-                    LogsMessageBuilder.AppendLine($"Proceed scan page {homeUrl} with keywords: {string.Join(", ", setting.Keywords)}");
-                    await SendLogMessage(LogsMessageBuilder);
-                    await ScanPage(homeUrl);
+                    Console.WriteLine($"Scanning {title.index}, title: {title.value}, url: {homeUrl}");
+                    Console.WriteLine("--------------------------------------------------------------------");
+                    LogsMessageBuilder.AppendLine($"Scanning {title.index}, title: {title.value}");
+                    LogsMessageBuilder.AppendLine("--------------------------------------------------------------------");
+                    Switch(homeUrl);
+                    Console.WriteLine($"Original: {title.value}");
+                    var titleToSearch = title.value.TrimEnd('\"');
+                    Console.WriteLine($"Formatted: {titleToSearch}");
+                    var searchXpath = $"//a[contains(normalize-space(),\"{titleToSearch}\")]";
+                    Console.WriteLine($"Xpath: {searchXpath}");
+                    var titleElements = WebDriver.FindElements(By.XPath(searchXpath));
+                    if (!titleElements.Any())
+                    {
+                        LogsMessageBuilder.AppendLine($"Listing is advertisement, skip");
+                        Console.WriteLine($"Could not find any ad that match");
+                        continue;
+                    }
+                    titleElements.First().Click();
+                    await RandomSleep();
+                    var description = await GetDescription();
+                    Console.WriteLine($"Description: {description}");
+                    await ProceedSendMessageAsync(description, title.value);
+                    await SaveTitle(title.value);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Warning, there was an error {e.Message} {e.GetType()}");
-                    await TryHandleErrorUnreachableException(e);
+                    Console.WriteLine($"There was an error reading listing {title} with home url {homeUrl}, skipped, e:{e.Message}");
                 }
                 finally
                 {
-                    LogsMessageBuilder.Clear();
-                    Console.WriteLine($"********************* End page {pageIndex} *********************");
-                    LogsMessageBuilder.AppendLine($"Done scan page {homeUrl}");
-                    LogsMessageBuilder.AppendLine($"------------------------------------------------------------------");
+                    Console.WriteLine("--------------------------------------------------------------------");
                     await SendLogMessage(LogsMessageBuilder);
+                    await UpdateExecutorLastRunTime();
                 }
             }
         }
-    }
 
-    public async Task ScanPage(string homeUrl)
-    {
-        var urls = await GetAllUrlElements(homeUrl);
-        var startPosition = GetStartPosition();
-        var stopPosition = GetStopPosition(urls.Count);
-        LogsMessageBuilder.AppendLine($"Found {urls.Count}, scanning from position {startPosition} to position {stopPosition}");
-        if (stopPosition == 0 || startPosition >= stopPosition)
+        private async Task<string> GetDescription()
         {
-            LogsMessageBuilder.AppendLine($"Found no result");
-            Console.WriteLine($"Found no result");
-            await SendLogMessage(LogsMessageBuilder);
-            return;
+            await RandomSleep();
+            var element = WebDriver.FindElements(By.CssSelector("div[class*='descriptionContainer']"));
+            return element?.FirstOrDefault()?.GetAttribute("innerText") ?? "";
         }
-        await SendLogMessage(LogsMessageBuilder);
-        for (var urlIndex = startPosition; urlIndex < stopPosition; urlIndex++)
+
+        public async Task<List<string>> GetAllUrlElements(string homeUrl)
         {
-            try
+            Switch(homeUrl);
+            await RandomSleep();
+            var locator = By.XPath("//a[@class='title ' or @data-testid='listing-link']");
+            var urls = WebDriver.FindElements(locator);
+            if (!urls.Any())
             {
-                LogsMessageBuilder.Clear();
-                Console.WriteLine($"Page {homeUrl} - Ad {urlIndex}");
-                Console.WriteLine("--------------------------------------------------------------------");
-                LogsMessageBuilder.AppendLine($"--------------------------------------------------------------------");
-                LogsMessageBuilder.AppendLine($"Ad {urlIndex}");
-                var titleElement = urls.GetItemByIndex(urlIndex).FindElement(By.ClassName("title"));
-                var title = titleElement.GetAttribute("innerText").ToLower();
-                LogsMessageBuilder.AppendLine($"Found title: {title}");
-
-                if (await HasTitleAlreadySaved(title))
-                {
-                    Console.WriteLine($"title: {title} is already saved, savedTitles");
-                    LogsMessageBuilder.AppendLine($"{title} is already saved, so skip");
-                    continue;
-                }
-
-                titleElement.Click();
-                await RandomSleep();
-                Console.WriteLine($"Title: {title}");
-                LogsMessageBuilder.AppendLine($"Ad URL: {WebDriver.Url}");
-                var description = (await GetDescription()).ToLower();
-                Console.WriteLine($"Description: {description}");
-                await ProceedSendMessageAsync(description, title);
-                await SaveTitle(title);
+                return new List<string>();
             }
-            catch (Exception e)
+            new Actions(WebDriver).MoveToElement(urls.Last()).Perform();
+            urls = WebDriver.FindElements(locator);
+            var titles = new List<string>();
+            foreach (var url in urls)
             {
-                Console.WriteLine($"There was an error reading ad {urlIndex} with home url {homeUrl}, skipped, e:{e.Message}");
+                titles.Add(url.GetAttribute("innerText").Trim());
             }
-            finally
-            {
-                urls = await GetAllUrlElements(homeUrl);
-                Console.WriteLine("--------------------------------------------------------------------");
-                await SendLogMessage(LogsMessageBuilder);
-                await UpdateExecutorLastRunTime();
-            }
+            Console.WriteLine("---------------------------All Titles-----------------------------------------");
+            Console.WriteLine(string.Join(Environment.NewLine, titles));
+            Console.WriteLine("---------------------------New Titles-----------------------------------------");
+            var resultTitles = await FilterOut(titles);
+            Console.WriteLine(string.Join(Environment.NewLine, resultTitles));
+            Console.WriteLine("--------------------------------------------------------------------");
+            return resultTitles;
         }
-    }
-
-    private async Task<string> GetDescription()
-    {
-        await RandomSleep();
-        var element = WebDriver.FindElements(By.CssSelector("div[class*='descriptionContainer']"));
-        return element?.FirstOrDefault().GetAttribute("innerText");
-    }
-
-    public async Task<IReadOnlyCollection<IWebElement>> GetAllUrlElements(string homeUrl)
-    {
-        Switch(homeUrl);
-        await RandomSleep();
-        var elements = WebDriver.FindElements(By.ClassName("info-container"));
-        new Actions(WebDriver).MoveToElement(elements.Last()).Perform();
-        return WebDriver.FindElements(By.ClassName("info-container"));
     }
 }

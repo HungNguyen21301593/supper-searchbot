@@ -7,6 +7,7 @@ using WebDriverManager.DriverConfigs.Impl;
 using WebDriverManager;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace supper_searchbot.Executor
 {
@@ -32,14 +33,15 @@ namespace supper_searchbot.Executor
 
         public async Task UpdateExecutorLastRunTime()
         {
+            await dataContext.Entry(ExecutorSetting).ReloadAsync();
             ExecutorSetting.LastExcuted = DateTime.UtcNow;
             await dataContext.SaveChangesAsync();
         }
 
         public async Task RandomSleep()
         {
-            var from = int.Parse(Environment.GetEnvironmentVariable("SLEEP_INTERVAL_FROM") ?? "5");
-            var to = int.Parse(Environment.GetEnvironmentVariable("SLEEP_INTERVAL_TO") ?? "7");
+            var from = int.Parse(Environment.GetEnvironmentVariable("SLEEP_INTERVAL_FROM") ?? "7");
+            var to = int.Parse(Environment.GetEnvironmentVariable("SLEEP_INTERVAL_TO") ?? "10");
             var sleep = RandomSleepEngine.Next(from, to);
             Console.WriteLine($"Sleep {sleep}");
             await Task.Delay(TimeSpan.FromSeconds(sleep));
@@ -65,7 +67,7 @@ namespace supper_searchbot.Executor
                 .Any(lowkey => lowerDescription.Contains(lowkey) || lowerTitle.Contains(lowkey));
             if (shouldIgnored)
             {
-                LogsMessageBuilder.AppendLine("Found an exculude keywords in title or description, skip");
+                LogsMessageBuilder.AppendLine("Found an excluded keywords in title or description, skip");
                 return;
             }
             if (!setting.Keywords.Any())
@@ -106,6 +108,8 @@ namespace supper_searchbot.Executor
         {
             try
             {
+                int truncateLength = Math.Min(2000, text.Length - 1);
+                text = $"{text.Substring(0, truncateLength)}...";
                 var bot = new TelegramBotClient(ExecutorSetting.User.TelegramBot.Token);
                 foreach (var telegramId in setting.TelegramIds)
                 {
@@ -165,13 +169,12 @@ namespace supper_searchbot.Executor
                 stringBuilder.AppendLine($"Title: {title}");
                 stringBuilder.AppendLine("------------------------------------------------------------------------");
             }
+            stringBuilder.AppendLine($"URL: {webUrl} ");
             if (!string.IsNullOrWhiteSpace(description))
             {
                 stringBuilder.AppendLine($"Description: {description}");
                 stringBuilder.AppendLine("------------------------------------------------------------------------");
             }
-
-            stringBuilder.AppendLine($"URL: {webUrl} ");
             return stringBuilder.ToString();
         }
 
@@ -209,6 +212,24 @@ namespace supper_searchbot.Executor
                     && h.Created >= DateTime.UtcNow.AddDays(-2)
                     && h.Title.Trim().ToLower().Equals(verifyingTitle.Trim().ToLower()));
             return result;
+        }
+
+        public async Task<List<string>> FilterOut(List<string> titles)
+        {
+            var formatTitles = titles.Select(t => t.Trim()).ToList();
+            if (formatTitles is null)
+            {
+                return new List<string>();
+            }
+            var existingTitles = await dataContext.Histories
+                .Where(h => h.ExecutorSettingId == ExecutorSetting.ID
+                    && h.Created >= DateTime.UtcNow.AddDays(-2))
+                .Select(h=>h.Title.Trim())
+                .ToListAsync();
+            return formatTitles
+                .Except(existingTitles)
+                .Distinct()
+                .ToList();
         }
 
         public async Task SaveTitle(string title)

@@ -2,7 +2,7 @@
 	 ('Hung','123','456');
 
 INSERT INTO public."ExecutorSettings" ("UserId","Status","Type","SettingJson","LastExcuted") VALUES
-	 (1,0,'Kijiji','{ "Type": "Kijiji", "StartPage": 0, "EndPage": 1, "MinAdsPositionOnEachPage": 0, "MaximumAdsOnEachPage": 10, "BaseUrlSetting": { "CriteriaUrls": [ "https://www.kijiji.ca/b-cars-trucks/ontario/2013__2019-used/c174l9004a68a49?for-sale-by=ownr&price=4000__25000&kilometers=500__160000" ], "DynamicParams": { "Page": "[page]" }, "StaticParams": {} }, "TelegramIds": [ "-915059345" ], "DumbTelegramIds": [ "-915059345" ], "MustHaveKeywords": [], "Keywords": [], "ExcludeKeywords": [] }','2025-03-05 00:00:00.000');
+	 (1,0,'Kijiji','{ "Type": "Kijiji", "StartPage": 0, "EndPage": 1, "MinAdsPositionOnEachPage": 0, "MaximumAdsOnEachPage": 10, "BaseUrlSetting": { "CriteriaUrls": [ "https://www.kijiji.ca/b-cars-trucks/ontario/2013__2019-used/c174l9004a68a49?for-sale-by=ownr&price=4000__25000&kilometers=500__160000" ], "DynamicParams": { "Page": "[page]" }, "StaticParams": {} }, "TelegramIds": [ "-915059345" ], "DumbTelegramIds": [ "-915059345" ], "MustHaveKeywords": [], "Keywords": [], "ExcludeKeywords": [] }','2022-03-05 00:00:00.000');
 	 
 INSERT INTO public."TelegramBot" ("Name","Link","Token","UserId") VALUES
 	 ('Supper','https://t.me/KijijiAutoSearchBot','6152200916:AAGfCn5mBnDhQ6qDEy-X8sKZF6rbnGjDPwk',1);

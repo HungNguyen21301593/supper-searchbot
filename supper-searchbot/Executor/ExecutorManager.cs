@@ -1,6 +1,7 @@
 ﻿using supper_searchbot.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace supper_searchbot.Executor
 {
@@ -30,8 +31,10 @@ namespace supper_searchbot.Executor
                 logger.LogInformation("There is no executor remanning");
                 return;
             }
+            logger.LogInformation($"Executing {JsonConvert.SerializeObject(nextExecutingSetting.SettingJson)}");
             try
             {
+                await dataContext.Entry(nextExecutingSetting).ReloadAsync();
                 nextExecutingSetting.LastExcuted = DateTime.UtcNow;
                 await dataContext.SaveChangesAsync();
                 using var kijijiExecutor = new KijijiExecutor(nextExecutingSetting, dataContext);
@@ -43,12 +46,14 @@ namespace supper_searchbot.Executor
             }
             catch (Exception e)
             {
-                logger.LogError("Executed failed", e);
+                logger.LogError($"Executed failed, {e.Message}");
+                await dataContext.Entry(nextExecutingSetting).ReloadAsync();
                 nextExecutingSetting.LastExcuted = DateTime.UtcNow.AddDays(-1);
                 await dataContext.SaveChangesAsync();
             }
             finally
             {
+                await dataContext.Entry(nextExecutingSetting).ReloadAsync();
                 nextExecutingSetting.LastExcuted = DateTime.UtcNow;
                 await dataContext.SaveChangesAsync();
             }
