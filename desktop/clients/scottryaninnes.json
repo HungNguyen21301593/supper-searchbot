@@ -1,0 +1,17 @@
+{
+  "Type": "Kijiji",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 0,
+  "MaximumAdsOnEachPage": 10,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.kijiji.ca/b-video-games-consoles/winnipeg/c141l1700192?rb=true" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-988172660" ],
+  "DumbTelegramIds": [],
+  "MustHaveKeywords": [],
+  "Keywords": [],
+  "ExcludeKeywords": []
+}

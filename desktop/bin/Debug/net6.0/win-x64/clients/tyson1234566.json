@@ -1,0 +1,17 @@
+{
+  "Type": "KijijiF",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 0,
+  "MaximumAdsOnEachPage": 10,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.kijiji.ca/b-cars-trucks/saskatchewan/used/c174l9009a49?for-sale-by=ownr&price=500__15000" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-964732923" ],
+  "DumbTelegramIds": [],
+  "MustHaveKeywords": [],
+  "Keywords": [],
+  "ExcludeKeywords": []
+}

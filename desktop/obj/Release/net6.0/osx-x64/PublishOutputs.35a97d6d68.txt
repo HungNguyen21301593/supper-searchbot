@@ -1,0 +1,12 @@
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\Searchbot.pdb
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\App.db
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\appsettings.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\clients\elieleveille_setting.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\clients\frankkelley.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\clients\itsbidness_setting.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\driver.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\setting.json
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\libsqlite3.dylib
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\libe_sqlite3.dylib
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\core.pdb
+C:\Personal\Projects\supper-searchbot\desktop\bin\Release\net6.0\win-x64\publish\osx-x64\Searchbot

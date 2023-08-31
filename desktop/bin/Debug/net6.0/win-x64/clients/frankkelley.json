@@ -1,0 +1,17 @@
+{
+  "Type": "FBM",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 0,
+  "MaximumAdsOnEachPage": 10,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.facebook.com/marketplace/112887355389124/bedroom-furniture?minPrice=0&maxPrice=250&itemCondition=used_like_new%2Cused_good%2Cused_fair&daysSinceListed=1&sortBy=creation_time_descend&exact=true" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-966075451" ],
+  "DumbTelegramIds": [ "-955008447" ],
+  "MustHaveKeywords": [],
+  "Keywords": [ "dressers", "dresser", "night stands", "night stand", "hutch", "chest of drawers" ],
+  "ExcludeKeywords": []
+}

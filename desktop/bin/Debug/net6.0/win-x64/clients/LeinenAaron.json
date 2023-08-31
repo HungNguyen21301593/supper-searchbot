@@ -1,0 +1,17 @@
+{
+  "Type": "FBM",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 0,
+  "MaximumAdsOnEachPage": 5,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.facebook.com/marketplace/110693528951991/search/?daysSinceListed=1&deliveryMethod=local_pick_up&sortBy=creation_time_descend&query=video%20games%20and%20consoles&exact=false" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-842721568" ],
+  "DumbTelegramIds": [],
+  "MustHaveKeywords": [],
+  "Keywords": [ "video games and consoles", "Nintendo Switch", "Games", "Nintendo", "Xbox", "PlayStation" ],
+  "ExcludeKeywords": []
+}

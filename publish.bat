@@ -1,6 +1,6 @@
-docker-compose up -d --force-recreate --build
-docker image tag supper-searchbot-executor-0 hungnguyen991995/supper-search
-docker image push hungnguyen991995/supper-search
+podman-compose up -d --force-recreate --build
+podman image tag localhost/supper-searchbot_executor hungnguyen991995/supper-search
+podman image push hungnguyen991995/supper-search
 set /p DUMMY=Hit ENTER to continue...
-docker compose down -v
+podman-compose down -v
 set /p DUMMY=Hit ENTER to continue...

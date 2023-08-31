@@ -1,0 +1,17 @@
+{
+  "Type": "FBM",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 0,
+  "MaximumAdsOnEachPage": 10,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.facebook.com/marketplace/saskatoon/iphones?minPrice=0&daysSinceListed=1&sortBy=creation_time_descend&exact=true" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-965000175" ],
+  "DumbTelegramIds": [ "-851138664" ],
+  "MustHaveKeywords": [ "Saskatoon, SK" ],
+  "Keywords": [ "Iphone 12", "Iphone 13" ],
+  "ExcludeKeywords": []
+}

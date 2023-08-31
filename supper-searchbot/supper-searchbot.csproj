@@ -19,17 +19,20 @@
 		<PackageReference Include="Selenium.Support" Version="4.1.0" />
 		<PackageReference Include="Selenium.WebDriver" Version="4.1.0" />
 		<PackageReference Include="Telegram.Bot" Version="17.0.0" />
-		<PackageReference Include="WebDriverManager" Version="2.12.3" />
+		<PackageReference Include="WebDriverManager" Version="2.17.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\core\core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Update="appsettings.json">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Model\" />
+	  <None Update="driver.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

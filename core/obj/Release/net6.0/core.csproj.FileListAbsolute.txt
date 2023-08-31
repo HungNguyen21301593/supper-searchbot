@@ -1,0 +1,12 @@
+C:\Personal\Projects\supper-searchbot\core\bin\Release\net6.0\core.deps.json
+C:\Personal\Projects\supper-searchbot\core\bin\Release\net6.0\core.dll
+C:\Personal\Projects\supper-searchbot\core\bin\Release\net6.0\core.pdb
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.csproj.AssemblyReference.cache
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.AssemblyInfoInputs.cache
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.AssemblyInfo.cs
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.csproj.CoreCompileInputs.cache
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.dll
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\refint\core.dll
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\core.pdb
+C:\Personal\Projects\supper-searchbot\core\obj\Release\net6.0\ref\core.dll

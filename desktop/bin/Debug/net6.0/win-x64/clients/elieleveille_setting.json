@@ -1,0 +1,17 @@
+{
+  "Type": "KijijiF",
+  "StartPage": 0,
+  "EndPage": 1,
+  "MinAdsPositionOnEachPage": 4,
+  "MaximumAdsOnEachPage": 5,
+  "BaseUrlSetting": {
+    "CriteriaUrls": [ "https://www.kijiji.ca/b-autos-camions/quebec/new__used/c174l9001a49?a-vendre-par=ownr" ],
+    "DynamicParams": { "Page": "[page]" },
+    "StaticParams": {}
+  },
+  "TelegramIds": [ "-783957640" ], //  "-783957640"
+  "DumbTelegramIds": [], //"-837207012"
+  "MustHaveKeywords": [],
+  "Keywords": [],
+  "ExcludeKeywords": []
+}

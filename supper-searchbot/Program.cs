@@ -1,11 +1,11 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Scheduling;
-using supper_searchbot.Executor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using supper_searchbot.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using supper_searchbot.Executor;
+using supper_searchbot.Entity;
 
 HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddSingleton<ExecutorManager>();

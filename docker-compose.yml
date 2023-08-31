@@ -15,34 +15,8 @@ services:
     volumes: 
       - kijiji-helper-db:/var/lib/postgresql/data
 
-  executor-0:
-    container_name: executor-0
-    build: ./supper-searchbot
-    restart: always
-    shm_size: 2gb
-    privileged: true
-    depends_on: 
-            - database
-    networks:
-          - web_net
-    environment:
-      - CONNECTION_STRING=${CONNECTION_STRING}
-  
-  executor-1:
-    container_name: executor-1
-    build: ./supper-searchbot
-    restart: always
-    shm_size: 2gb
-    privileged: true
-    depends_on: 
-            - database
-    networks:
-          - web_net
-    environment:
-      - CONNECTION_STRING=${CONNECTION_STRING}
-  
-  executor-2:
-    container_name: executor-2
+  executor:
+    container_name: executor
     build: ./supper-searchbot
     restart: always
     shm_size: 2gb
